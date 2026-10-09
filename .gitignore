@@ -1,0 +1,10 @@
+# --- 与 Analyst OS 原型无关的本地会议纪要，不对外发布 ---
+loreal-minutes.xml
+minutes/
+
+# --- Claude Code 本地配置 ---
+.claude/
+
+# --- 系统 / 依赖 ---
+.DS_Store
+node_modules/

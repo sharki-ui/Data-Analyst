@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Analyst OS 分析师训练场：通过真实业务任务，练习 AI 时代的数据分析、判断与管理沟通。"
+    />
+    <meta name="theme-color" content="#f6f2e9" />
+    <title>Analyst OS · 分析师训练场</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-workbench">跳到任务工作台</a>
+
+    <div class="app-shell" data-app-state="learning">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Analyst OS 首页">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span class="brand-copy">
+            <strong>Analyst OS</strong>
+            <small>分析师训练场</small>
+          </span>
+        </a>
+
+        <div class="scenario-switcher" aria-label="当前训练场景">
+          <label for="scenario-select">训练场景</label>
+          <select id="scenario-select" data-action="change-scenario">
+            <option value="sales-ops-q3">任务 01 · Sales Ops 季度预测</option>
+          </select>
+          <span class="duration-pill" aria-label="预计用时 15 分钟">15 min</span>
+        </div>
+
+        <div class="topbar-actions">
+          <div
+            class="save-status"
+            id="autosave-status"
+            data-save-state="saved"
+            role="status"
+            aria-live="polite"
+          >
+            <span class="save-dot" aria-hidden="true"></span>
+            <span data-save-label>进度已自动保存</span>
+          </div>
+          <button
+            class="icon-button"
+            id="reset-progress-button"
+            data-action="open-reset-dialog"
+            type="button"
+            aria-label="重置本次任务进度"
+            title="重置本次任务进度"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4.9 7.5A8 8 0 1 1 4 13" />
+              <path d="M4.9 7.5V3.8M4.9 7.5h3.7" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="workspace-grid">
+        <aside class="learning-rail" aria-labelledby="path-title">
+          <div class="rail-heading">
+            <p class="eyebrow">你的入职任务</p>
+            <h1 id="path-title">销售管道诊断</h1>
+            <p>你将代表 Sales Ops，给销售副总裁一个能执行的季度判断。</p>
+          </div>
+
+          <div class="overall-progress" aria-labelledby="progress-label">
+            <div class="progress-meta">
+              <span id="progress-label">任务进度</span>
+              <strong id="progress-percent" data-progress-percent>14%</strong>
+            </div>
+            <div
+              class="progress-track"
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="14"
+              aria-labelledby="progress-label"
+            >
+              <span id="progress-bar" style="width: 14%"></span>
+            </div>
+            <span class="progress-caption" id="progress-count" data-progress-count>第 1 / 7 关</span>
+          </div>
+
+          <nav class="learning-path" aria-label="七关能力路径">
+            <ol>
+              <li class="is-current" data-stage-state="current">
+                <button
+                  type="button"
+                  id="stage-brief"
+                  data-stage="brief"
+                  data-target-step="brief"
+                  aria-current="step"
+                >
+                  <span class="stage-marker"><span>01</span></span>
+                  <span class="stage-copy">
+                    <strong>读懂业务问题</strong>
+                    <small>明确目标与交付物</small>
+                  </span>
+                  <span class="stage-state" data-stage-label>进行中</span>
+                </button>
+              </li>
+              <li data-stage-state="locked">
+                <button
+                  type="button"
+                  id="stage-definition"
+                  data-stage="definition"
+                  data-target-step="definition"
+                >
+                  <span class="stage-marker"><span>02</span></span>
+                  <span class="stage-copy">
+                    <strong>定义指标口径</strong>
+                    <small>先定义，再计算</small>
+                  </span>
+                  <span class="stage-state" data-stage-label>待完成</span>
+                </button>
+              </li>
+              <li data-stage-state="locked">
+                <button
+                  type="button"
+                  id="stage-quality"
+                  data-stage="quality"
+                  data-target-step="quality"
+                >
+                  <span class="stage-marker"><span>03</span></span>
+                  <span class="stage-copy">
+                    <strong>检查数据质量</strong>
+                    <small>识别脏数据与偏差</small>
+                  </span>
+                  <span class="stage-state" data-stage-label>待完成</span>
+                </button>
+              </li>
+              <li data-stage-state="locked">
+                <button
+                  type="button"
+                  id="stage-forecast"
+                  data-stage="forecast"
+                  data-target-step="forecast"
+                >
+                  <span class="stage-marker"><span>04</span></span>
+                  <span class="stage-copy">
+                    <strong>验算季度预测</strong>
+                    <small>从计算走向判断</small>
+                  </span>
+                  <span class="stage-state" data-stage-label>待完成</span>
+                </button>
+              </li>
+              <li data-stage-state="locked">
+                <button
+                  type="button"
+                  id="stage-ai-audit"
+                  data-stage="ai-audit"
+                  data-target-step="forecast"
+                  data-target-anchor="ai-audit-card"
+                >
+                  <span class="stage-marker"><span>05</span></span>
+                  <span class="stage-copy">
+                    <strong>质疑 AI 结论</strong>
+                    <small>找出证据漏洞</small>
+                  </span>
+                  <span class="stage-state" data-stage-label>待完成</span>
+                </button>
+              </li>
+              <li data-stage-state="locked">
+                <button
+                  type="button"
+                  id="stage-memo"
+                  data-stage="memo"
+                  data-target-step="memo"
+                >
+                  <span class="stage-marker"><span>06</span></span>
+                  <span class="stage-copy">
+                    <strong>提交管理建议</strong>
+                    <small>事实、判断、行动</small>
+                  </span>
+                  <span class="stage-state" data-stage-label>待完成</span>
+                </button>
+              </li>
+              <li data-stage-state="locked">
+                <button
+                  type="button"
+                  id="stage-review"
+                  data-stage="review"
+                  data-action="open-review"
+                >
+                  <span class="stage-marker"><span>07</span></span>
+                  <span class="stage-copy">
+                    <strong>完成复盘</strong>
+                    <small>看见能力，而非分数</small>
+                  </span>
+                  <span class="stage-state" data-stage-label>待解锁</span>
+                </button>
+              </li>
+            </ol>
+          </nav>
+
+          <div class="rail-principle">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3 4.7 6v5.2c0 4.6 3 7.9 7.3 9.8 4.3-1.9 7.3-5.2 7.3-9.8V6L12 3Z" />
+              <path d="m8.8 12 2 2 4.5-4.5" />
+            </svg>
+            <p><strong>训练原则</strong><span>AI 可以帮你计算，判断仍由你负责。</span></p>
+          </div>
+        </aside>
+
+        <main class="workbench" id="main-workbench">
+          <header class="mission-header">
+            <div>
+              <div class="mission-kicker">
+                <span>Northstar Cloud</span>
+                <span aria-hidden="true">/</span>
+                <span>2026 Q3</span>
+                <span class="status-badge">模拟业务环境</span>
+              </div>
+              <h2>管道够不够，团队该追哪几单？</h2>
+              <p>你的结论将在 15:00 的销售周会上被用来分配未来六周的管理精力。</p>
+            </div>
+            <div class="mission-clock" aria-label="距离模拟会议还有 15 分钟">
+              <span>距周会</span>
+              <strong id="mission-timer" data-timer-seconds="900">15:00</strong>
+            </div>
+          </header>
+
+          <nav class="step-tabs" role="tablist" aria-label="任务步骤">
+            <button
+              class="is-active"
+              id="tab-brief"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-brief"
+              data-step-target="brief"
+            >
+              <span>01</span>任务简报
+            </button>
+            <button
+              id="tab-definition"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-definition"
+              data-step-target="definition"
+              tabindex="-1"
+            >
+              <span>02</span>定义口径
+            </button>
+            <button
+              id="tab-quality"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-quality"
+              data-step-target="quality"
+              tabindex="-1"
+            >
+              <span>03</span>数据体检
+            </button>
+            <button
+              id="tab-forecast"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-forecast"
+              data-step-target="forecast"
+              tabindex="-1"
+            >
+              <span>04</span>预测验算
+            </button>
+            <button
+              id="tab-memo"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-memo"
+              data-step-target="memo"
+              tabindex="-1"
+            >
+              <span>05</span>管理建议
+            </button>
+          </nav>
+
+          <div class="step-panels">
+            <section
+              class="step-panel is-active"
+              id="panel-brief"
+              role="tabpanel"
+              aria-labelledby="tab-brief"
+              data-step-panel="brief"
+            >
+              <div class="panel-intro">
+                <div>
+                  <p class="eyebrow">Step 01 · 先理解，再动数据</p>
+                  <h3>你刚收到销售副总裁的消息</h3>
+                </div>
+                <span class="skill-chip">问题定义</span>
+              </div>
+
+              <article class="executive-message">
+                <div class="avatar" aria-hidden="true">EL</div>
+                <div>
+                  <div class="message-meta">
+                    <strong>Elena Liu</strong>
+                    <span>VP of Sales · 10:02</span>
+                  </div>
+                  <blockquote>
+                    “Q3 还剩 6 周。看起来 pipeline coverage 不差，但最近几次预测都偏乐观。请你在下午周会前告诉我：我们是否真的能达成目标、最该推动哪三笔机会，以及我现在要做什么。”
+                  </blockquote>
+                </div>
+              </article>
+
+              <div class="brief-grid">
+                <article class="business-card target-card">
+                  <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" /></svg>
+                  </div>
+                  <span>Q3 销售目标</span>
+                  <strong id="brief-target" data-metric="quarter-target">$1.20M</strong>
+                  <small>含已签约收入</small>
+                </article>
+                <article class="business-card">
+                  <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg>
+                  </div>
+                  <span>已签约</span>
+                  <strong id="brief-booked" data-metric="booked-revenue">$480K</strong>
+                  <small>目标完成率 40%</small>
+                </article>
+                <article class="business-card">
+                  <div class="card-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+                  </div>
+                  <span>剩余时间</span>
+                  <strong id="brief-weeks" data-metric="weeks-remaining">6 周</strong>
+                  <small>季度截止 9 月 30 日</small>
+                </article>
+              </div>
+
+              <article class="assignment-card">
+                <header>
+                  <div>
+                    <span class="card-index">你的任务</span>
+                    <h4>给管理层一个可验证、可行动的判断</h4>
+                  </div>
+                  <span class="deliverable-tag">1-page memo</span>
+                </header>
+                <ol class="deliverable-list">
+                  <li><span>1</span><p><strong>判断能否达标</strong>说明你的口径、数字和置信程度。</p></li>
+                  <li><span>2</span><p><strong>指出关键风险</strong>区分数据问题与真实业务风险。</p></li>
+                  <li><span>3</span><p><strong>选择三笔机会</strong>给出优先级和下一步动作，而非只报金额。</p></li>
+                </ol>
+              </article>
+
+              <section class="checkpoint" aria-labelledby="brief-check-title">
+                <div>
+                  <span class="checkpoint-label">过关检查</span>
+                  <h4 id="brief-check-title">这次分析真正要支持什么决策？</h4>
+                  <p>先用一句话重述问题。好的问题会同时包含决策人、时间范围和行动。</p>
+                </div>
+                <label class="field-group" for="problem-statement">
+                  <span>我的问题定义</span>
+                  <textarea
+                    id="problem-statement"
+                    name="problemStatement"
+                    rows="3"
+                    data-answer="problem-statement"
+                    aria-describedby="problem-statement-help"
+                  ></textarea>
+                  <small id="problem-statement-help">建议包含：Elena、Q3、达标判断、机会优先级。</small>
+                </label>
+                <div class="panel-actions">
+                  <button class="button button-secondary" type="button" data-action="save-draft" data-step="brief">
+                    保存草稿
+                  </button>
+                  <button
+                    class="button button-primary"
+                    id="complete-brief-button"
+                    type="button"
+                    data-action="complete-step"
+                    data-step="brief"
+                    data-next-step="definition"
+                  >
+                    我已读懂，开始定义口径
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </section>
+            </section>
+
+            <section
+              class="step-panel"
+              id="panel-definition"
+              role="tabpanel"
+              aria-labelledby="tab-definition"
+              data-step-panel="definition"
+              hidden
+            >
+              <div class="panel-intro">
+                <div>
+                  <p class="eyebrow">Step 02 · 先定义，再计算</p>
+                  <h3>把“管道够不够”变成可计算的问题</h3>
+                  <p>指标没有统一口径时，同一份数据能讲出完全相反的故事。</p>
+                </div>
+                <span class="skill-chip">指标设计</span>
+              </div>
+
+              <div class="definition-layout">
+                <form class="metric-workbook" id="metric-definition-form" data-form="metric-definition">
+                  <article class="work-card">
+                    <header class="work-card-header">
+                      <div><span class="card-index">Metric 01</span><h4>剩余目标缺口</h4></div>
+                      <span class="formula-tag">Gap</span>
+                    </header>
+                    <label class="field-group" for="gap-formula">
+                      <span>写出公式</span>
+                      <input id="gap-formula" name="gapFormula" type="text" autocomplete="off" data-answer="gap-formula" />
+                      <small>明确目标与已签约收入是否处于同一周期、同一币种。</small>
+                    </label>
+                  </article>
+
+                  <article class="work-card">
+                    <header class="work-card-header">
+                      <div><span class="card-index">Metric 02</span><h4>加权管道金额</h4></div>
+                      <span class="formula-tag">Weighted pipeline</span>
+                    </header>
+                    <label class="field-group" for="weighted-formula">
+                      <span>写出公式</span>
+                      <input
+                        id="weighted-formula"
+                        name="weightedFormula"
+                        type="text"
+                        autocomplete="off"
+                        data-answer="weighted-formula"
+                      />
+                      <small>概率要作用于每一笔机会，不能先对概率做简单平均。</small>
+                    </label>
+                  </article>
+
+                  <article class="work-card">
+                    <header class="work-card-header">
+                      <div><span class="card-index">Metric 03</span><h4>管道覆盖率</h4></div>
+                      <span class="formula-tag">Coverage</span>
+                    </header>
+                    <label class="field-group" for="coverage-formula">
+                      <span>写出公式</span>
+                      <input
+                        id="coverage-formula"
+                        name="coverageFormula"
+                        type="text"
+                        autocomplete="off"
+                        data-answer="coverage-formula"
+                      />
+                      <small>想清楚分母应该用完整目标，还是尚未完成的目标缺口。</small>
+                    </label>
+                  </article>
+                </form>
+
+                <aside class="definition-sidebar">
+                  <section class="assumption-card" aria-labelledby="scope-title">
+                    <div class="side-card-heading">
+                      <span class="mini-icon" aria-hidden="true">?</span>
+                      <div><h4 id="scope-title">选择纳入范围</h4><p>勾选你认为计算时必须满足的条件。</p></div>
+                    </div>
+                    <fieldset class="check-list" id="scope-assumptions" data-question="scope-assumptions">
+                      <legend class="sr-only">预测计算纳入范围</legend>
+                      <label><input type="checkbox" name="scope" value="open-only" /><span>只纳入尚未关闭的机会</span></label>
+                      <label><input type="checkbox" name="scope" value="quarter-close" /><span>预计签约日在 Q3 内</span></label>
+                      <label><input type="checkbox" name="scope" value="valid-amount" /><span>金额有效且币种已统一</span></label>
+                      <label><input type="checkbox" name="scope" value="valid-probability" /><span>概率处于 0%–100%</span></label>
+                    </fieldset>
+                  </section>
+
+                  <section class="warning-card">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.8 19h18.4L12 3Z" /><path d="M12 9v4m0 3h.01" /></svg>
+                    <div><strong>常见误区</strong><p>“总 pipeline ÷ 总目标”看起来直观，却会混入跨季度机会，并把已赢单重复计算。</p></div>
+                  </section>
+                </aside>
+              </div>
+
+              <section class="evidence-strip" aria-labelledby="definition-evidence-title">
+                <div>
+                  <span class="evidence-label">已知证据</span>
+                  <strong id="definition-evidence-title">目标 $1.20M · 已签约 $480K · 剩余 6 周</strong>
+                </div>
+                <p>数据日期：2026-08-19 · 金额币种：USD</p>
+              </section>
+
+              <div class="panel-actions">
+                <button class="button button-ghost" type="button" data-step-target="brief">返回简报</button>
+                <button
+                  class="button button-primary"
+                  id="validate-definition-button"
+                  type="button"
+                  data-action="validate-definition"
+                  data-step="definition"
+                  data-next-step="quality"
+                >
+                  检查口径并继续
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                </button>
+              </div>
+            </section>
+
+            <section
+              class="step-panel"
+              id="panel-quality"
+              role="tabpanel"
+              aria-labelledby="tab-quality"
+              data-step-panel="quality"
+              hidden
+            >
+              <div class="panel-intro">
+                <div>
+                  <p class="eyebrow">Step 03 · 数据不会主动告诉你它有问题</p>
+                  <h3>先体检，再相信结果</h3>
+                  <p>请像审计员一样检查 12 笔开放机会。你的任务不是清理所有数据，而是判断哪些问题会改变预测。</p>
+                </div>
+                <span class="skill-chip">数据质量</span>
+              </div>
+
+              <section class="data-workbench" aria-labelledby="opportunity-table-title">
+                <header class="table-toolbar">
+                  <div class="table-title">
+                    <h4 id="opportunity-table-title">Q3 Open Opportunities</h4>
+                    <span id="visible-row-count" data-visible-row-count>12 / 12 笔</span>
+                  </div>
+                  <div class="filter-controls" aria-label="机会数据筛选">
+                    <label class="search-field" for="table-search">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m16.5 16.5 4 4" /></svg>
+                      <span class="sr-only">搜索客户或负责人</span>
+                      <input id="table-search" type="search" autocomplete="off" data-filter="search" aria-label="搜索客户或负责人" />
+                    </label>
+                    <label class="compact-select" for="stage-filter">
+                      <span class="sr-only">按阶段筛选</span>
+                      <select id="stage-filter" data-filter="stage">
+                        <option value="all">全部阶段</option>
+                        <option value="qualification">Qualification</option>
+                        <option value="proposal">Proposal</option>
+                        <option value="negotiation">Negotiation</option>
+                      </select>
+                    </label>
+                    <label class="compact-select" for="owner-filter">
+                      <span class="sr-only">按负责人筛选</span>
+                      <select id="owner-filter" data-filter="owner">
+                        <option value="all">全部负责人</option>
+                      </select>
+                    </label>
+                    <label class="risk-toggle" for="risk-only-filter">
+                      <input id="risk-only-filter" type="checkbox" data-filter="risk-only" />
+                      <span>仅看异常</span>
+                    </label>
+                  </div>
+                </header>
+
+                <div class="table-scroll" tabindex="0">
+                  <table id="opportunity-table" data-table="opportunities">
+                    <caption class="sr-only">Northstar Cloud 2026 年第三季度开放销售机会数据</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col" data-sort="opportunity">机会 / 客户</th>
+                        <th scope="col" data-sort="owner">负责人</th>
+                        <th scope="col" data-sort="stage">阶段</th>
+                        <th scope="col" class="numeric" data-sort="amount">金额</th>
+                        <th scope="col" class="numeric" data-sort="probability">概率</th>
+                        <th scope="col" data-sort="closeDate">预计签约</th>
+                        <th scope="col" class="numeric" data-sort="daysSinceActivity">未跟进</th>
+                        <th scope="col">状态</th>
+                      </tr>
+                    </thead>
+                    <tbody id="opportunity-table-body" data-table-body>
+                      <tr data-record-id="OPP-2401">
+                        <td><strong>Atlas Renewal</strong><small>Atlas Systems</small></td>
+                        <td>Maya</td><td><span class="stage-pill negotiation">Negotiation</span></td>
+                        <td class="numeric">$180K</td><td class="numeric">80%</td><td>Sep 12</td><td class="numeric">3 天</td>
+                        <td><span class="quality-pill clean">正常</span></td>
+                      </tr>
+                      <tr data-record-id="OPP-2402" data-quality="stale">
+                        <td><strong>Vertex Expansion</strong><small>Vertex Labs</small></td>
+                        <td>Jordan</td><td><span class="stage-pill proposal">Proposal</span></td>
+                        <td class="numeric">$240K</td><td class="numeric">65%</td><td>Sep 28</td><td class="numeric quality-cell">31 天</td>
+                        <td><span class="quality-pill warning">待确认</span></td>
+                      </tr>
+                      <tr data-record-id="OPP-2403" data-quality="date">
+                        <td><strong>Helio Platform</strong><small>Helio Foods</small></td>
+                        <td>Avery</td><td><span class="stage-pill qualification">Qualification</span></td>
+                        <td class="numeric">$320K</td><td class="numeric">35%</td><td class="quality-cell">Oct 18</td><td class="numeric">8 天</td>
+                        <td><span class="quality-pill warning">待确认</span></td>
+                      </tr>
+                      <tr data-record-id="OPP-2404" data-quality="missing-probability">
+                        <td><strong>Nova Security</strong><small>Nova Retail</small></td>
+                        <td>Maya</td><td><span class="stage-pill proposal">Proposal</span></td>
+                        <td class="numeric">$155K</td><td class="numeric quality-cell">—</td><td>Sep 20</td><td class="numeric">6 天</td>
+                        <td><span class="quality-pill warning">待确认</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <footer class="table-footer">
+                  <span><i class="legend-dot clean"></i>通过基础校验</span>
+                  <span><i class="legend-dot warning"></i>需要业务判断</span>
+                  <button type="button" class="text-button" id="reset-filters-button" data-action="reset-filters">清除筛选</button>
+                </footer>
+              </section>
+
+              <div class="quality-analysis-grid">
+                <section class="question-card" aria-labelledby="quality-question-title">
+                  <div class="question-heading">
+                    <span class="question-number">Q</span>
+                    <div><h4 id="quality-question-title">哪些问题会高估本季度预测？</h4><p>可以多选。选择后，在证据栏说明具体记录。</p></div>
+                  </div>
+                  <fieldset class="check-grid" id="quality-issues" data-question="quality-issues">
+                    <legend class="sr-only">选择会高估季度预测的数据问题</legend>
+                    <label><input type="checkbox" name="qualityIssue" value="duplicate" /><span><strong>重复机会</strong><small>同一交易被计算两次</small></span></label>
+                    <label><input type="checkbox" name="qualityIssue" value="outside-quarter" /><span><strong>跨季度签约</strong><small>预计日期不在 Q3</small></span></label>
+                    <label><input type="checkbox" name="qualityIssue" value="missing-probability" /><span><strong>概率缺失</strong><small>无法可靠加权</small></span></label>
+                    <label><input type="checkbox" name="qualityIssue" value="stale" /><span><strong>长期未跟进</strong><small>阶段可能已经失真</small></span></label>
+                    <label><input type="checkbox" name="qualityIssue" value="currency" /><span><strong>币种未统一</strong><small>金额不可直接相加</small></span></label>
+                    <label><input type="checkbox" name="qualityIssue" value="owner" /><span><strong>负责人缺失</strong><small>影响行动分配但不直接改金额</small></span></label>
+                  </fieldset>
+                </section>
+
+                <aside class="evidence-notebook" aria-labelledby="evidence-notebook-title">
+                  <div class="notebook-heading">
+                    <div><span class="evidence-label">Evidence</span><h4 id="evidence-notebook-title">我的证据栏</h4></div>
+                    <span id="evidence-count" data-evidence-count>0 条</span>
+                  </div>
+                  <div class="evidence-list" id="evidence-list" data-evidence-list aria-live="polite">
+                    <p class="empty-note">点击表格记录或勾选问题，将证据带到这里。管理建议只能引用已收集的证据。</p>
+                  </div>
+                  <label class="field-group compact" for="quality-note">
+                    <span>补充判断</span>
+                    <textarea id="quality-note" name="qualityNote" rows="3" data-answer="quality-note"></textarea>
+                  </label>
+                </aside>
+              </div>
+
+              <div class="panel-actions">
+                <button class="button button-ghost" type="button" data-step-target="definition">返回口径</button>
+                <button
+                  class="button button-primary"
+                  id="complete-quality-button"
+                  type="button"
+                  data-action="complete-step"
+                  data-step="quality"
+                  data-next-step="forecast"
+                >
+                  提交体检，重新计算
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                </button>
+              </div>
+            </section>
+
+            <section
+              class="step-panel"
+              id="panel-forecast"
+              role="tabpanel"
+              aria-labelledby="tab-forecast"
+              data-step-panel="forecast"
+              hidden
+            >
+              <div class="panel-intro">
+                <div>
+                  <p class="eyebrow">Step 04 · 算对之后，还要判断对</p>
+                  <h3>验算预测，并审查 AI 的乐观结论</h3>
+                  <p>数字回答“按当前假设会发生什么”，你要回答“管理层应该相信多少”。</p>
+                </div>
+                <span class="skill-chip">预测与 AI 审核</span>
+              </div>
+
+              <div class="forecast-kpis" aria-label="预测关键指标">
+                <article>
+                  <span>剩余目标缺口</span>
+                  <strong id="forecast-gap" data-metric="target-gap">$720K</strong>
+                  <small>目标 − 已签约</small>
+                </article>
+                <article>
+                  <span>原始开放管道</span>
+                  <strong id="forecast-raw-pipeline" data-metric="raw-pipeline">$1.46M</strong>
+                  <small>未处理异常</small>
+                </article>
+                <article class="accent">
+                  <span>清洗后加权管道</span>
+                  <strong id="forecast-weighted-pipeline" data-metric="weighted-pipeline">$648K</strong>
+                  <small>按口径纳入</small>
+                </article>
+                <article class="risk">
+                  <span>缺口覆盖率</span>
+                  <strong id="forecast-coverage" data-metric="coverage">0.90×</strong>
+                  <small>低于 1.0×</small>
+                </article>
+              </div>
+
+              <div class="forecast-layout">
+                <section class="calculation-card" aria-labelledby="reconcile-title">
+                  <header class="work-card-header">
+                    <div><span class="card-index">Reconcile</span><h4 id="reconcile-title">手动复核关键数字</h4></div>
+                    <span class="formula-tag">必做</span>
+                  </header>
+                  <div class="calculation-lines">
+                    <label for="manual-gap"><span>目标缺口</span><span class="money-input"><b>$</b><input id="manual-gap" name="manualGap" inputmode="decimal" data-answer="manual-gap" /><em>K</em></span></label>
+                    <label for="manual-weighted"><span>加权管道</span><span class="money-input"><b>$</b><input id="manual-weighted" name="manualWeighted" inputmode="decimal" data-answer="manual-weighted" /><em>K</em></span></label>
+                    <label for="manual-coverage"><span>缺口覆盖率</span><span class="money-input"><input id="manual-coverage" name="manualCoverage" inputmode="decimal" data-answer="manual-coverage" /><em>×</em></span></label>
+                  </div>
+                  <button class="button button-secondary button-full" id="verify-calculation-button" type="button" data-action="verify-calculation">
+                    与系统结果核对
+                  </button>
+                  <div class="inline-feedback" id="calculation-feedback" data-feedback="calculation" role="status" aria-live="polite" hidden></div>
+                </section>
+
+                <section class="priority-card" aria-labelledby="priority-title">
+                  <header class="work-card-header">
+                    <div><span class="card-index">Prioritize</span><h4 id="priority-title">选择三笔优先机会</h4></div>
+                    <span id="priority-count" data-priority-count>0 / 3</span>
+                  </header>
+                  <p>不要只看金额。综合阶段、时间、近期活动与可干预性。</p>
+                  <div class="priority-list" id="priority-opportunity-list" data-priority-list>
+                    <label><input type="checkbox" name="priorityOpportunity" value="OPP-2401" /><span><strong>Atlas Renewal</strong><small>Negotiation · $180K · 3 天未跟进</small></span></label>
+                    <label><input type="checkbox" name="priorityOpportunity" value="OPP-2402" /><span><strong>Vertex Expansion</strong><small>Proposal · $240K · 31 天未跟进</small></span></label>
+                    <label><input type="checkbox" name="priorityOpportunity" value="OPP-2404" /><span><strong>Nova Security</strong><small>Proposal · $155K · 概率待确认</small></span></label>
+                    <label><input type="checkbox" name="priorityOpportunity" value="OPP-2405" /><span><strong>Orion Data Cloud</strong><small>Negotiation · $130K · 5 天未跟进</small></span></label>
+                  </div>
+                </section>
+              </div>
+
+              <section class="ai-audit-card" id="ai-audit-card" aria-labelledby="ai-audit-title">
+                <header>
+                  <div class="ai-avatar" aria-hidden="true">AI</div>
+                  <div><span class="card-index">AI draft · 等待你审核</span><h4 id="ai-audit-title">Copilot 给出的初步结论</h4></div>
+                  <span class="unverified-badge">未验证</span>
+                </header>
+                <blockquote>
+                  “当前开放管道为 $1.46M，是剩余目标缺口的 2.0 倍，因此 Q3 达标风险较低。建议团队优先跟进金额最大的 Helio Platform，并继续扩大顶部管道。”
+                </blockquote>
+                <fieldset class="audit-options" id="ai-audit-options" data-question="ai-audit">
+                  <legend>这段结论有哪些证据漏洞？</legend>
+                  <label><input type="checkbox" name="aiAudit" value="raw-vs-weighted" /><span>用原始管道代替加权管道，夸大了可实现收入</span></label>
+                  <label><input type="checkbox" name="aiAudit" value="outside-quarter" /><span>金额最大的机会预计在 Q4 签约，不应支持 Q3 判断</span></label>
+                  <label><input type="checkbox" name="aiAudit" value="certainty" /><span>从“覆盖倍数”直接推出“风险低”，忽略了数据质量和执行风险</span></label>
+                  <label><input type="checkbox" name="aiAudit" value="more-pipeline" /><span>“扩大顶部管道”未说明六周内是否可转化，行动不够具体</span></label>
+                  <label><input type="checkbox" name="aiAudit" value="target-correct" /><span>$1.20M 的季度目标本身一定错误</span></label>
+                </fieldset>
+                <div class="audit-footer">
+                  <p><strong>审核原则：</strong>检查口径、时间范围、数据质量，以及结论是否超出证据。</p>
+                  <button class="button button-secondary" id="check-ai-audit-button" type="button" data-action="check-ai-audit">提交 AI 审核</button>
+                </div>
+              </section>
+
+              <section class="evidence-strip" aria-labelledby="forecast-evidence-title">
+                <div><span class="evidence-label">关键证据</span><strong id="forecast-evidence-title">加权管道 $648K，低于 $720K 的剩余缺口</strong></div>
+                <button class="text-button" type="button" data-action="view-evidence">查看已收集证据</button>
+              </section>
+
+              <div class="panel-actions">
+                <button class="button button-ghost" type="button" data-step-target="quality">返回体检</button>
+                <button
+                  class="button button-primary"
+                  id="complete-forecast-button"
+                  type="button"
+                  data-action="complete-step"
+                  data-step="forecast"
+                  data-next-step="memo"
+                >
+                  确认判断，撰写建议
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+                </button>
+              </div>
+            </section>
+
+            <section
+              class="step-panel"
+              id="panel-memo"
+              role="tabpanel"
+              aria-labelledby="tab-memo"
+              data-step-panel="memo"
+              hidden
+            >
+              <div class="panel-intro">
+                <div>
+                  <p class="eyebrow">Step 05 · 从分析走向影响</p>
+                  <h3>把结果写成管理层能立即使用的一页建议</h3>
+                  <p>不要复述分析过程。先给判断，再给证据，最后说明谁在什么时候做什么。</p>
+                </div>
+                <span class="skill-chip">Executive communication</span>
+              </div>
+
+              <div class="memo-layout">
+                <form class="memo-editor" id="management-memo-form" data-form="management-memo">
+                  <header class="memo-header">
+                    <div>
+                      <span class="memo-doc-type">Decision memo</span>
+                      <h4>Q3 Sales Pipeline Review</h4>
+                    </div>
+                    <div class="memo-meta"><span>To: Elena Liu, VP Sales</span><span>Date: 2026-08-19</span></div>
+                  </header>
+
+                  <label class="memo-field" for="memo-headline">
+                    <span><b>01</b><strong>Headline</strong><small>一句话说清判断和影响</small></span>
+                    <textarea id="memo-headline" name="memoHeadline" rows="2" maxlength="160" data-answer="memo-headline"></textarea>
+                    <em><span id="headline-count" data-character-count="memo-headline">0</span> / 160</em>
+                  </label>
+
+                  <fieldset class="memo-field findings-field">
+                    <legend><span><b>02</b><strong>Key findings</strong><small>用三条证据支撑判断</small></span></legend>
+                    <label for="memo-finding-1"><span>1</span><input id="memo-finding-1" name="memoFinding1" type="text" data-answer="memo-finding-1" /></label>
+                    <label for="memo-finding-2"><span>2</span><input id="memo-finding-2" name="memoFinding2" type="text" data-answer="memo-finding-2" /></label>
+                    <label for="memo-finding-3"><span>3</span><input id="memo-finding-3" name="memoFinding3" type="text" data-answer="memo-finding-3" /></label>
+                  </fieldset>
+
+                  <label class="memo-field" for="memo-recommendation">
+                    <span><b>03</b><strong>Recommendation</strong><small>写清动作、负责人和时间</small></span>
+                    <textarea id="memo-recommendation" name="memoRecommendation" rows="5" maxlength="500" data-answer="memo-recommendation"></textarea>
+                    <em><span id="recommendation-count" data-character-count="memo-recommendation">0</span> / 500</em>
+                  </label>
+                </form>
+
+                <aside class="memo-review-panel">
+                  <section class="score-preview" aria-labelledby="score-preview-title">
+                    <header><div><span class="card-index">提交前检查</span><h4 id="score-preview-title">管理建议质量</h4></div><strong id="memo-score-preview" data-score-preview>—</strong></header>
+                    <ul id="memo-checklist" data-memo-checklist>
+                      <li data-check="judgment"><span></span>开头明确回答能否达标</li>
+                      <li data-check="metric"><span></span>引用关键数字和正确口径</li>
+                      <li data-check="evidence"><span></span>区分事实、假设与风险</li>
+                      <li data-check="priority"><span></span>明确三笔优先机会</li>
+                      <li data-check="action"><span></span>建议包含负责人和时间</li>
+                    </ul>
+                    <button class="button button-secondary button-full" id="preview-score-button" type="button" data-action="preview-score">检查我的 memo</button>
+                  </section>
+
+                  <section class="memo-evidence-card" aria-labelledby="memo-evidence-title">
+                    <header><h4 id="memo-evidence-title">可引用的证据</h4><span id="memo-evidence-count" data-evidence-count>0 条</span></header>
+                    <div id="memo-evidence-list" data-memo-evidence-list>
+                      <p>你在数据体检和预测验算中收集的证据会出现在这里。</p>
+                    </div>
+                  </section>
+
+                  <div class="submission-card">
+                    <p>提交后将生成七维能力反馈。你仍可返回修改并重新评分。</p>
+                    <button class="button button-primary button-full" id="submit-memo-button" type="submit" form="management-memo-form" data-action="submit-memo">
+                      提交给 Elena
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+                    </button>
+                  </div>
+                </aside>
+              </div>
+
+              <div class="panel-actions align-start">
+                <button class="button button-ghost" type="button" data-step-target="forecast">返回预测</button>
+              </div>
+            </section>
+          </div>
+        </main>
+
+        <aside class="coach-panel" aria-labelledby="coach-title" data-coach-state="ready">
+          <header class="coach-header">
+            <div class="coach-identity">
+              <div class="coach-orb" aria-hidden="true"><span></span></div>
+              <div><span class="coach-label">规则驱动 · 原型</span><h2 id="coach-title">AI 分析教练</h2></div>
+            </div>
+            <button class="icon-button small" id="coach-collapse-button" type="button" data-action="toggle-coach" aria-label="收起 AI 教练" aria-expanded="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+            </button>
+          </header>
+
+          <div class="coach-context" id="coach-context" data-coach-context>
+            <span>当前关卡</span>
+            <strong>01 · 读懂业务问题</strong>
+            <p>完成一次自己的尝试后，我会根据你的答案给提示。</p>
+          </div>
+
+          <div class="coach-messages" id="coach-messages" data-coach-messages role="log" aria-live="polite" aria-label="AI 教练对话">
+            <article class="coach-message is-coach" data-message-role="coach">
+              <div class="message-avatar" aria-hidden="true">AI</div>
+              <div>
+                <p>先别急着看表格。Elena 需要的不是一个数字，而是一个决定。</p>
+                <p>试着回答：<strong>谁要在什么时间范围内，依据你的分析采取什么行动？</strong></p>
+              </div>
+            </article>
+          </div>
+
+          <div class="coach-quick-actions" aria-label="快捷求助">
+            <button type="button" data-coach-prompt="challenge" data-action="coach-quick-prompt">追问我的逻辑</button>
+            <button type="button" data-coach-prompt="hint" data-action="coach-quick-prompt">给一个小提示</button>
+            <button type="button" data-coach-prompt="check" data-action="coach-quick-prompt">检查当前答案</button>
+          </div>
+
+          <form class="coach-composer" id="coach-form" data-form="coach-message">
+            <label for="coach-question" class="sr-only">向 AI 教练提问</label>
+            <textarea id="coach-question" name="coachQuestion" rows="2" aria-describedby="coach-policy"></textarea>
+            <button id="coach-submit-button" type="submit" data-action="send-coach-message" aria-label="发送给 AI 教练">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 4 16 8-16 8 2.3-8L4 4Z" /><path d="M6.5 12H20" /></svg>
+            </button>
+          </form>
+          <p class="coach-policy" id="coach-policy">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.7 6v5.2c0 4.6 3 7.9 7.3 9.8 4.3-1.9 7.3-5.2 7.3-9.8V6L12 3Z" /></svg>
+            教练会提示、追问和检查，但不会替你提交答案。
+          </p>
+        </aside>
+      </div>
+    </div>
+
+    <dialog class="review-dialog" id="completion-dialog" data-dialog="completion">
+      <form method="dialog" class="dialog-close-row">
+        <button class="icon-button" value="close" aria-label="关闭复盘">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </form>
+      <div class="completion-hero">
+        <span class="completion-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" /></svg></span>
+        <p class="eyebrow">Mission complete</p>
+        <h2>你完成了一次真实的分析闭环</h2>
+        <p>从定义问题到提交管理建议，你练习的不是“做图表”，而是用证据推动决策。</p>
+      </div>
+      <div class="review-summary">
+        <div class="total-score"><span>本次能力分</span><strong id="final-total-score" data-final-score>82</strong><small>/ 100</small></div>
+        <div class="review-verdict"><span>当前水平</span><strong id="final-level" data-final-level>可靠的初级分析师</strong><p id="final-feedback" data-final-feedback>判断清晰、口径可靠；下一步重点提升风险量化和行动优先级。</p></div>
+      </div>
+      <section class="skill-scorecard" aria-labelledby="skill-score-title">
+        <header><h3 id="skill-score-title">七维能力反馈</h3><span>基于本次任务表现</span></header>
+        <div class="skill-scores" id="skill-score-list" data-skill-scores>
+          <div data-skill="problem"><span>问题定义</span><div><i style="width: 88%"></i></div><strong>88</strong></div>
+          <div data-skill="metric"><span>指标准确性</span><div><i style="width: 84%"></i></div><strong>84</strong></div>
+          <div data-skill="quality"><span>数据质量</span><div><i style="width: 90%"></i></div><strong>90</strong></div>
+          <div data-skill="reasoning"><span>分析推理</span><div><i style="width: 78%"></i></div><strong>78</strong></div>
+          <div data-skill="ai-audit"><span>AI 审查</span><div><i style="width: 86%"></i></div><strong>86</strong></div>
+          <div data-skill="recommendation"><span>商业建议</span><div><i style="width: 75%"></i></div><strong>75</strong></div>
+          <div data-skill="communication"><span>管理表达</span><div><i style="width: 80%"></i></div><strong>80</strong></div>
+        </div>
+      </section>
+      <div class="review-actions">
+        <button class="button button-secondary" id="revisit-weakness-button" type="button" data-action="revisit-weakness">回到最弱一关</button>
+        <button class="button button-primary" id="finish-review-button" type="button" data-action="finish-review">保存成绩，完成任务</button>
+      </div>
+    </dialog>
+
+    <dialog class="confirm-dialog" id="reset-dialog" data-dialog="reset">
+      <form method="dialog">
+        <div class="confirm-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01" /><path d="M10.3 4.9 2.6 18.2A2 2 0 0 0 4.3 21h15.4a2 2 0 0 0 1.7-2.8L13.7 4.9a2 2 0 0 0-3.4 0Z" /></svg>
+        </div>
+        <h2>重置这次训练？</h2>
+        <p>你的答案、证据和能力评分将被清空。这个操作无法撤销。</p>
+        <div class="confirm-actions">
+          <button class="button button-secondary" value="cancel" id="cancel-reset-button">保留进度</button>
+          <button class="button button-danger" value="confirm" id="confirm-reset-button" data-action="confirm-reset">确认重置</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true" data-toast-region></div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

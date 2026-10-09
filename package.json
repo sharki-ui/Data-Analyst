@@ -1,0 +1,13 @@
+{
+  "name": "analyst-os-training-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Analyst OS — AI 时代的数据分析项目训练场",
+  "scripts": {
+    "serve": "node scripts/serve.js",
+    "check": "node --check app/app.js && node --check scripts/serve.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
